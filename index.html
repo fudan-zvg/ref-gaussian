@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ref-Gaussian</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/dics.min.css">
+    <!-- <link rel="stylesheet" href="css/bulma.min.css"> -->
+    <script src="scripts/dics.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', domReady);
+        function domReady() {
+            for (const e of document.querySelectorAll(".b-dics")) {
+                new Dics({
+                    container: e,
+                    textPosition: "top"
+                });
+            }
+        }
+    </script>
+    <style>
+        #title {
+            font-size: 4em;
+            background: linear-gradient(90deg, rgb(0, 119, 255), purple, red);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center; 
+        }
+    </style>
+    <link rel="shortcut icon" href="img/render_ball_icon.png" type="image/x-icon" />
+</head>
+
+<body>
+    <section>
+        <div class="text-center mt-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 style="font-size: 3em;" id="title">Reflective Gaussian Splatting</h1>
+                        <br>
+
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 0 auto; text-align: center;">
+                            <a href=" https://yaoyuxuanyyds.github.io/yuxuanzZ.github.io/" style="text-align: center; text-decoration: none;">
+                                <span style="font-size: 20px; margin: 5px 0;">Yuxuan Yao*<sup>1</sup></span>
+                            </a>
+                            <span style="font-size: 20px; margin: 5px 0;">Zixuan Zeng*<sup>1</sup></span>
+                            <a href="https://sulvxiangxin.github.io/" style="text-align: center; text-decoration: none;">
+                                <span style="font-size: 20px; margin: 5px 0;">Chun Gu<sup>1</sup></span>
+                            </a>
+                            <a href="https://surrey-uplab.github.io/" style="text-align: center; text-decoration: none;">
+                                <span style="font-size: 20px; margin: 5px 0;">Xiatian Zhu<sup>2</sup></span>
+                            </a>
+                            <a href="https://lzrobots.github.io/" style="text-align: center; text-decoration: none;">
+                                <span style="font-size: 20px; margin: 5px 0;">Li Zhang<sup>1</sup></span>
+                            </a>
+                        </div>
+                        <div>
+                            <span style="font-size: 20px; margin: 5px 0;">1. School of Data Science, Fudan University</span><br>
+                            <span style="font-size: 20px; margin: 5px 0;">2. University of Surrey</span>
+                        </div>
+                        <br>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 50px; margin: 0 auto; text-align: center;">
+                            <a href="https://arxiv.org/abs/2412.15867" style="text-align: center; text-decoration: none;">
+                                <img src="img/page.png" height="60px" alt="Paper">
+                                <h4 style="margin: 5px 0;"><strong>Paper</strong></h4>
+                            </a>
+                            <a href="https://github.com/fudan-zvg/ref-gaussian" style="text-align: center; text-decoration: none;">
+                                <img src="img/github.png" height="60px" alt="Code">
+                                <h4 style="margin: 5px 0;"><strong>Code</strong></h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+
+    <section>
+        <div class="container">
+            <video width="100%" playsinline="" autoplay="" loop="" preload="" muted="">
+                <source src="img/videos/teaser.mp4" type="video/mp4">
+            </video>
+        </div>
+    </section>
+    <br>
+
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+
+                    <h2 style="font-size: 2.3em;">Abstract</h2>
+                    <hr style="margin-top:0px">
+                    <p class="text-justify">
+                        Novel view synthesis has experienced significant advancements owing to increasingly capable NeRF- and 3DGS-based methods. However, reflective object reconstruction remains challenging, lacking a proper solution to achieve real-time, high-quality rendering while accommodating inter-reflection. To fill this gap, we introduce a Reflective Gaussian splatting (<b><i>Ref-Gaussian</i></b>) framework characterized with two components: (I) <em>Physically based deferred rendering</em> that empowers the rendering equation with pixel-level material properties via formulating split-sum approximation; (II) <em>Gaussian-grounded inter-reflection</em> that realizes the desired inter-reflection function within a Gaussian splatting paradigm for the first time. To enhance geometry modeling, we further introduce material-aware normal propagation and an initial per-Gaussian shading stage, along with 2D Gaussian primitives. Extensive experiments on standard datasets demonstrate that <b><i>Ref-Gaussian</i></b> surpasses existing approaches in terms of quantitative metrics, visual quality, and compute efficiency. Further, we show that our method serves as a unified solution for both reflective and non-reflective scenes, going beyond the previous alternatives focusing on only reflective scenes. Also, we illustrate that <b><i>Ref-Gaussian</i></b> supports more applications such as relighting and editing.
+                    </p>
+                    
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <br>
+    <br>
+    <br>
+
+    <section>
+        <div class="container">
+
+            <div class="row" style="margin-top:5px">
+                <div class="col-12 text-center">
+                    <h2 style="font-size: 2.3em;">Method Overview</h2>
+                    <hr style="margin-top:0px">
+                </div>
+            </div>
+            <img class="img-fluid" src="img/pipeline.png" alt="">
+            <br>
+            <br>
+            <p class="text-justify">
+                <strong>Overview of the Ref-Gaussian framework:</strong>
+            </p>
+                <p>
+                    <b>First</b>, starting from a set of 2D Gaussians equipped with material properties, we apply the splatting process to produce feature maps and perform ray-tracing on the extracted mesh to compute visibility for the specular term in the rendering equation. <b>Next</b>, we use the pixel-level feature maps to apply the rendering equation with split-sum approximation, yielding the final physically based rendering result.
+                </p>
+                <ul>
+                    <li>
+                        <strong>Reflective Gaussian splatting (Ref-Gaussian):</strong> a generic 3D reconstruction framework realizing real-time high-quality rendering of reflective objects with inter-reflection in 3D space.
+                    </li>
+                    <li>
+                        <strong>Physically based deferred rendering:</strong> the rendering equation with material properties via formulating split-sum approximation.
+                    </li>
+                    <li>
+                        <strong>Gaussian-grounded inter-reflection with optimized geometry modeling:</strong> realizing the desired inter-reflection function within a Gaussian splatting paradigm for the first time.
+                    </li>
+                </ul>
+            
+        </div>
+    </section>
+    <br>
+    <br>
+    <br>
+
+    <div class="col-12 text-center">
+        <h2 style="font-size: 2.3em;">Qualitative comparison</h2>
+    </div>
+    <br>
+    <br>
+    <section>
+        <div class="container">
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3>Comparison of novel view synthesis</h3>
+                </div>
+            </div>
+            <div class="b-row" style="overflow: hidden;">
+                <figure style="text-align: center; margin: 0;">
+                    <video 
+                        width="100%" 
+                        autoplay 
+                        loop 
+                        preload 
+                        muted 
+                        style="object-fit: cover; width: 100%; height: 100%; object-position: center;">
+                        <source src="img/videos/nvs.mp4" type="video/mp4">
+                    </video>
+                </figure>
+            </div>
+            
+            <br>
+            <br>
+            <hr style="margin-top:0px">
+            <img class="img-fluid" src="img/nvs_comparision.png" alt="">
+            <p class="text-center">Qualitative comparison of NVS results on Shiny Blender and Glossy synthetic dataset.</p>
+            
+
+
+        </div>
+
+    </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3>Comparison of geometry reconstruction</h3>
+                </div>
+            </div>
+            <hr style="margin-top:0px">
+            <img class="img-fluid" src="img/normal_comparison.png" alt="">
+            <p class="text-center">Qualitative comparison of geometry reconstruction results on Shiny Blender dataset.</p>
+        </div>
+    </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3>Comparison of environment map estimation</h3>
+                </div>
+            </div>
+            <hr style="margin-top:0px">
+            <img class="img-fluid" src="img/env_map_comparison.png" alt="">
+            <p class="text-center">Qualitative comparisons of the estimated environment maps on Glossy Synthetic dataset.</p>
+        </div>
+    </div>
+    </section>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+
+
+    <div class="col-12 text-center">
+        <h2 style="font-size: 2.3em;">Inverse rendering results</h2>
+    </div>
+    <br>
+    <br>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3>Inverse rendering results on the Glossy Synthetic dataset</h3>
+                </div>
+            </div>
+            <hr style="margin-top:0px">
+            <img class="img-fluid" src="img/inverse.png" alt="">
+            <br>
+            <br>
+            
+
+            <!-- <div class="b-row">
+                <figure style="text-align: center;">
+                    <video width="100%" playsinline="" autoplay="" loop="" preload="" muted="">
+                    <source src="img/videos/demo_syn4.mp4" type="video/mp4">
+                    </video>
+                </figure>
+            </div> -->
+
+        </div>
+    </section>
+    <br>
+    <br>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3>Inverse rendering results on Ref-Real dataset</h3>
+                </div>
+            </div>
+            <hr style="margin-top:0px">
+            <img class="img-fluid" src="img/real_inverse.png" alt="">
+            <p class="text-center">Inverse rendering results on Ref-Real dataset. <b>Indirect
+                lighting:</b> Only considering indirect light as specular component when rendering a focused view.</p>
+            
+            <br>
+            <br>
+            <div class="b-row">
+                <figure style="text-align: center;">
+                    <video width="100%" playsinline="" autoplay="" loop="" preload="" muted="">
+                    <source src="img/videos/demo_tensoir.mp4" type="video/mp4">
+                    </video>
+                </figure>
+            </div>
+        </div>
+    </div>
+    </section>
+    <br>
+    <br>
+    <div class="col-12 text-center">
+        <h2 style="font-size: 2.3em;">More qualitative results </h2>
+    </div>
+    <br>
+    <br>
+    <section>
+        <div class="container">
+
+            <hr style="margin-top:0px">
+            <img class="img-fluid" src="img/vis_appendix.png" alt="">
+            <br>
+            <br>
+
+        </div>
+    </section>
+
+    <footer class="text-center">
+        <div class="container">
+            <div class="row ">
+                <div class="col-12">
+                    <h2>BibTeX</h2>
+                    <hr style="margin-top:0px">
+                    <div class="bibtexsection">
+                        <pre><code>
+    @article{yao2024refGS,
+        title={Reflective Gaussian Splatting},
+        author={Yao, Yuxuan and Zeng, Zixuan and Gu, Chun and Zhu, Xiatian and Zhang, Li},
+        journal={arXiv preprint},
+        year={2024},
+    }
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <br>
+
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <p>
+                Acknowledgements: The website template was borrowed from <a href="https://lioryariv.github.io/idr/">Lior Yariv</a>.
+                Image sliders are based on <a href="https://github.com/abelcabezaroman/definitive-image-comparison-slider">dics</a>.
+            </p>
+        </div>
+    </div>
+    <br>
+    <br>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap-4.4.1.js"></script>
+</body>
+</html>
